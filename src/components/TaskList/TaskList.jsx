@@ -4,12 +4,15 @@ import TaskItem from '../TaskItem/TaskItem';
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
 
+
   useEffect(() => {
-    fetch('./tasks.json') // Fetch the tasks.json file from the same directory as the component
+    fetch('http://localhost:4300/tasks') // Fetch the tasks.json file from the same directory as the component
       .then((response) => response.json())
       .then((data) => setTasks(data))
       .catch((error) => console.error('Error fetching tasks:', error));
   }, []);
+
+
 
   return (
     <div className="task-list container">
@@ -22,13 +25,13 @@ const TaskList = () => {
               <th className="bg-primary text-white text-center">Title</th>
               <th className="bg-primary text-white">Description</th>
               <th className="bg-primary text-white text-center">Status</th>
-              <th className="bg-primary text-white text-center">Update</th>
+              <th className="bg-primary text-white text-center">Update Status</th>
               <th className="bg-primary text-white text-center">Delete</th>
             </tr>
           </thead>
           <tbody>
             {tasks.map((task) => (
-              <TaskItem key={task.id} task={task} />
+              <TaskItem key={task._id} task={task} />
             ))}
           </tbody>
         </table>

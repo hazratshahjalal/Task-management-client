@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
+import axios from 'axios'; // Add this line to import axios
+
 
 const TaskForm = ({ addTask }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic form validation to ensure all fields are filled
@@ -21,18 +23,26 @@ const TaskForm = ({ addTask }) => {
       description,
       status,
     };
+    console.log(newTask)
 
-    // Log the form values for checking
-    console.log(newTask);
+    // Make an HTTP POST request to the backend server to add the new task
+    try {
+      const response = await axios.post('http://localhost:4300/tasks', newTask);
+      console.log('New task added:', response.data);
 
-    // Call the addTask function passed from the parent component to add the new task
-    addTask(newTask);
+      // Call the addTask function passed from the parent component to update the UI
+      addTask(response.data);
+      alert("Task Added")
 
-    // Clear the form fields after submission
-    setTitle('');
-    setDescription('');
-    setStatus('');
+      // Clear the form fields after submission
+      setTitle('');
+      setDescription('');
+      setStatus('');
+    } catch (error) {
+      console.error('Error adding new task:', error);
+    }
   };
+
 
   return (
     <Container className="my-4 p-4 bg-light">
